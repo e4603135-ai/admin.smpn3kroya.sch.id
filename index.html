@@ -1,21 +1,336 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Domain Takeover</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOMAIN TAKEN — fsociety</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { border: 2px solid #f00; padding: 50px; border-radius: 10px; text-align: center; background: #0a0a0a; }
-        h1 { color: #f00; font-size: 3em; }
-        .sub { color: #f80; font-size: 1.5em; }
-        .status { color: #f00; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.2; } }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Share Tech Mono', monospace;
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* BACKGROUND FSOICIETY — gambar masker fsociety + efek gelap */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                /* overlay gelap biar teks keliatan */
+                radial-gradient(circle at 30% 40%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%),
+                /* gambar fsociety (masker) — pake base64 kecil biar cepat */
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.35"><rect width="800" height="800" fill="%231a1a1a"/><circle cx="400" cy="380" r="200" fill="%232d2d2d" stroke="%23aaaaaa" stroke-width="6"/><circle cx="400" cy="380" r="150" fill="%231a1a1a" stroke="%23888888" stroke-width="4"/><circle cx="400" cy="380" r="100" fill="%23222222" stroke="%23666666" stroke-width="3"/><circle cx="340" cy="340" r="30" fill="%23333333" stroke="%23555555" stroke-width="2"/><circle cx="460" cy="340" r="30" fill="%23333333" stroke="%23555555" stroke-width="2"/><path d="M340 440 Q400 500 460 440" stroke="%23555555" stroke-width="6" fill="none"/><rect x="320" y="520" width="160" height="80" rx="10" fill="%23222222" stroke="%23555555" stroke-width="3"/><text x="400" y="575" font-family="monospace" font-size="40" fill="%23666666" text-anchor="middle" font-weight="bold">F SOCIETY</text><text x="400" y="660" font-family="monospace" font-size="28" fill="%23444444" text-anchor="middle">MR. ROBOT</text></svg>');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            animation: slowZoom 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* efek scanline / statis tambahan */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            width: 90%;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(200, 50, 50, 0.5);
+            border-radius: 28px;
+            box-shadow: 0 0 60px rgba(200, 30, 30, 0.25), inset 0 0 80px rgba(200, 30, 30, 0.08);
+            animation: flickerBox 4s infinite alternate;
+        }
+
+        @keyframes flickerBox {
+            0% { border-color: rgba(200, 50, 50, 0.4); box-shadow: 0 0 40px rgba(200, 30, 30, 0.2); }
+            100% { border-color: rgba(255, 70, 70, 0.7); box-shadow: 0 0 80px rgba(200, 30, 30, 0.4); }
+        }
+
+        /* GLITCH TEXT UTAMA */
+        .main-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: clamp(3.2rem, 14vw, 6.5rem);
+            text-transform: uppercase;
+            color: #f0f0f0;
+            letter-spacing: 6px;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.4),
+                0 0 30px rgba(255, 0, 0, 0.2),
+                0 0 60px rgba(200, 0, 0, 0.15);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.2rem;
+            animation: glitchText 3s infinite alternate;
+        }
+
+        @keyframes glitchText {
+            0% { transform: skew(0deg, 0deg); text-shadow: 2px 0 red, -2px 0 cyan; }
+            5% { transform: skew(2deg, -1deg); text-shadow: -3px 0 red, 3px 0 cyan; }
+            10% { transform: skew(0deg, 0deg); text-shadow: 0 0 10px red, 0 0 30px cyan; }
+            15% { transform: skew(-3deg, 1deg); text-shadow: 4px 0 red, -4px 0 cyan; }
+            20% { transform: skew(0deg, 0deg); text-shadow: 0 0 20px red; }
+            100% { transform: skew(0deg, 0deg); text-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        }
+
+        /* efek glitch tambahan (pseudoelement) */
+        .main-title::before,
+        .main-title::after {
+            content: "DOMAIN TAKEN";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .main-title::before {
+            color: #ff0000;
+            z-index: -1;
+            transform: translate(-4px, -2px);
+            animation: glitchShift1 2s infinite linear alternate;
+        }
+
+        .main-title::after {
+            color: #00ffff;
+            z-index: -1;
+            transform: translate(4px, 2px);
+            animation: glitchShift2 2.5s infinite linear alternate;
+        }
+
+        @keyframes glitchShift1 {
+            0% { transform: translate(-6px, -3px); opacity: 0.5; }
+            100% { transform: translate(4px, 2px); opacity: 0.9; }
+        }
+        @keyframes glitchShift2 {
+            0% { transform: translate(6px, 3px); opacity: 0.5; }
+            100% { transform: translate(-4px, -2px); opacity: 0.9; }
+        }
+
+        .sub-text {
+            font-size: clamp(1rem, 3vw, 1.6rem);
+            color: #d0d0d0;
+            background: rgba(0,0,0,0.5);
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            display: inline-block;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 80, 80, 0.25);
+            margin-top: 0.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 400;
+            box-shadow: 0 0 30px rgba(255,0,0,0.1);
+        }
+
+        .sub-text i {
+            color: #ff4d4d;
+            margin: 0 8px;
+        }
+
+        .fsociety-badge {
+            margin-top: 2.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .fsociety-badge span {
+            font-family: 'Share Tech Mono', monospace;
+            background: rgba(20, 20, 30, 0.7);
+            padding: 0.5rem 1.6rem;
+            border-radius: 40px;
+            border: 1px solid #444;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #aaa;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 20px rgba(255,0,0,0.05);
+        }
+
+        .fsociety-badge i {
+            color: #ff3b3b;
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 8px rgba(255,0,0,0.3));
+        }
+
+        .status-bar {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #8f8f8f;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem;
+        }
+
+        .status-bar .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ff2a2a;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 16px #ff2a2a;
+            animation: blinkDot 1.2s infinite;
+        }
+
+        @keyframes blinkDot {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        .status-bar .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid #2a2a2a;
+        }
+
+        /* efek garis hacker */
+        .hacker-line {
+            font-size: 0.8rem;
+            color: #4f4f4f;
+            margin-top: 1.8rem;
+            letter-spacing: 2px;
+            font-family: 'Share Tech Mono', monospace;
+            border-left: 2px solid #ff3b3b;
+            padding-left: 16px;
+            text-align: left;
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+            padding: 0.5rem 1.8rem;
+            border-radius: 6px;
+        }
+
+        .hacker-line i {
+            color: #ff3b3b;
+            margin-right: 10px;
+        }
+
+        /* responsif */
+        @media (max-width: 600px) {
+            .container { padding: 1.8rem 1.2rem; }
+            .status-bar { gap: 1rem; }
+            .fsociety-badge span { font-size: 0.9rem; padding: 0.3rem 1rem; }
+        }
+
+        /* small flicker tambahan */
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            background: transparent;
+            animation: overlayFlicker 7s infinite;
+        }
+
+        @keyframes overlayFlicker {
+            0% { background: rgba(255,0,0,0); }
+            2% { background: rgba(255,0,0,0.04); }
+            4% { background: rgba(0,255,255,0.02); }
+            6% { background: rgba(255,0,0,0); }
+            100% { background: rgba(0,0,0,0); }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>⚠️ TAKEOVER ⚠️</h1>
-        <div class="sub">admin.smpn3kroya.sch.id</div>
-        <div class="status">This domain has been compromised</div>
+
+    <!-- overlay glitch ekstra -->
+    <div class="glitch-overlay"></div>
+
+    <div class="container">
+        <!-- judul utama dengan glitch -->
+        <div class="main-title">DOMAIN TAKEN</div>
+
+        <!-- sub teks -->
+        <div class="sub-text">
+            <i class="fas fa-skull"></i> your domain has been taken <i class="fas fa-skull"></i>
+        </div>
+
+        <!-- badge fsociety -->
+        <div class="fsociety-badge">
+            <i class="fas fa-mask"></i>
+            <span>#fsociety</span>
+            <span>MR. ROBOT</span>
+            <i class="fas fa-code"></i>
+        </div>
+
+        <!-- status / info tambahan -->
+        <div class="status-bar">
+            <div class="stat-item">
+                <span class="dot"></span> <span>TAKEOVER ACTIVE</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-hashtag" style="color:#ff4d4d;"></i> <span>ROOT ACCESS</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clock" style="color:#888;"></i> <span>00:00:42</span>
+            </div>
+        </div>
+
+        <!-- pesan hacker style -->
+        <div class="hacker-line">
+            <i class="fas fa-terminal"></i> > ACCESS GRANTED — DOMAIN REDIRECTED TO fsociety
+        </div>
+
+        <!-- footer kecil -->
+        <div style="margin-top: 2rem; font-size: 0.7rem; color: #3f3f4f; letter-spacing: 2px; border-top: 1px solid #1f1f2f; padding-top: 1.2rem;">
+            <i class="fas fa-shield-halved" style="color:#ff3b3b; margin-right: 6px;"></i> 
+            <span style="opacity:0.6;">// TAKEOVER SIMULATION — FOR EDUCATIONAL PURPOSE ONLY //</span>
+        </div>
     </div>
+
+    <!-- font awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </body>
 </html>
